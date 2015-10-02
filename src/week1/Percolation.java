@@ -13,8 +13,8 @@ public class Percolation {
 
   private final int size; // size of the N * N matrix
   private final boolean[] field; // boolean array to block or open the site
-  WeightedQuickUnionUF quickUnionUF1; // Used to avoid backwash
-  WeightedQuickUnionUF quickUnionUF2;
+  private WeightedQuickUnionUF quickUnionUF1; // Used to avoid backwash
+  private WeightedQuickUnionUF quickUnionUF2;
   private final int topRoot; // virtual top root
   private final int bottomRoot; // virtual bottom root
   private final int rowLength;
@@ -87,7 +87,11 @@ public class Percolation {
     // validate the row and column values
     validate(row, column);
     final int pos = xyTo1D(row, column);
-    return field[pos];
+    // checks if the site is blocked or not
+    if (field[pos]) {
+      return true;
+    }
+    return false;
   }
 
   //
@@ -118,11 +122,7 @@ public class Percolation {
   public boolean percolates() {
 
     // checks if the virtual top root and bottom root are connected.
-    if (quickUnionUF1.connected(topRoot, bottomRoot)) {
-      return true;
-    } else {
-      return false;
-    }
+      return quickUnionUF1.connected(topRoot, bottomRoot);
 
   }
 
@@ -207,9 +207,9 @@ public class Percolation {
    */
   private int xyTo1D(int row, int column) {
 
-    row = row - 1;
-    column = column - 1;
-    return row * rowLength + column;
+    int newRow = row - 1;
+    int newColumn = column - 1;
+    return newRow * rowLength + newColumn;
   }
 
 }
